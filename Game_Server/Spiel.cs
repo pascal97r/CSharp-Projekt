@@ -4,30 +4,43 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Game_Server
 {
-    class Spiel
+    public class Spiel
     {
+        String TRENN = ";";
+
         #region Attribute
         List<Spieler> spieler;
-        Dictionary<PictureBox, int> meteoriten;
-
-        Timer timer;
+        List<PictureBox> meteoriten;
+        
         Panel panel;
 
-        int geschwindkeit;
+        int geschwindkeit = 1;
         int wartezeit;
 
         Random rand;
 
         int spielBrettAnfang;
         int SpielBrettEnde;
+
+        Thread thread;
+        ThreadStart ts;
+
+        Boolean synS1 = false;
+        Boolean synS2 = false;
+
+        Boolean start = false;
+
+        Form1 server;
         #endregion
+        
 
         #region Mehrspieler
-        public Spiel(Spieler spieler1, Spieler spieler2)
+        public Spiel(Spieler spieler1, Spieler spieler2, Form1 server)
         {
             spieler = new List<Spieler>();
 
@@ -37,10 +50,61 @@ namespace Game_Server
             spieler.Add(spieler1);
             spieler.Add(spieler2);
 
-            meteoriten = new Dictionary<PictureBox, int>();
-            timer = new Timer();
-            timer.Interval = 1000;
+            this.server = server;
+
+            meteoriten = new List<PictureBox>();
             rand = new Random();
+
+            ts = new ThreadStart(game);
+            thread = new Thread(ts);
+            thread.Start();
+
+            int x1 = 300;
+            int x2 = 400;
+            int y = 400;
+            
+            foreach(Spieler s in spieler)
+            {
+                s.sendeNachricht("STA" + TRENN + x1 + TRENN + y + TRENN + x2 + TRENN + y + TRENN);
+                x1 += 100;
+                x2 -= 100;
+            }
+        }
+
+        public void synchronisation()
+        {
+            if (synS1 == false)
+            {
+                synS1 = true;
+            }
+            else if (synS2 == false)
+            {
+                synS2 = true;
+            }
+        }
+
+        //Spielablauf
+        private void game()
+        {
+            if (synS1 == true && synS2 == true)
+            {
+                start = true;
+
+                for (int countdown = 5; countdown == 0; countdown--)
+                {
+                    foreach (Spieler s in spieler)
+                    {
+                        s.sendeNachricht("CND" + TRENN + countdown + TRENN);
+                        countdown--;
+                        Thread.Sleep(1000);
+                    }
+                }
+            }
+            
+            while (start)
+            {
+                
+            }
         }
         #endregion
 
@@ -49,7 +113,8 @@ namespace Game_Server
         {
             int x = neuerSpawnPunkt();
 
-            String nachricht = "MET;" + x + ";" + rand.Next(1, 5);
+            String nachricht = "MET" + TRENN + x + TRENN + rand.Next(1, 5);
+
             foreach(Spieler s in spieler)
             {
                 s.sendeNachricht(nachricht);
@@ -64,31 +129,26 @@ namespace Game_Server
             {
                 x =
                rand.Next(spielBrettAnfang, SpielBrettEnde);
-                foreach (KeyValuePair<PictureBox, int> pair in meteoriten)
+
+                foreach (PictureBox pair in meteoriten)
                 {
                     //entweder Image-Location oder Location
-                    if (pair.Key.Location.X == x)
+                  
+                    if (pair.Location.X > x && x < pair.Location.X + 100)
                     {
                         überlappen = true;
                     }
-                    else if (pair.Key.Location.X > x && x < pair.Key.Size.Width + pair.Key.Location.X)
+                    else
                     {
-                        überlappen = true;
+                        pair.Location = new Point(pair.Location.X - geschwindkeit);
                     }
-                    pair.Key.Location = new Point(pair.Key.Location.X - pair.Value);
                 }
             } while (überlappen == true);
             return x;
         }
 
-        private void bewegeMeteoren()
-        {
-            foreach (KeyValuePair<PictureBox, int> pair in meteoriten)
-            {
-                //entweder Image-Location oder Location
-                pair.Key.Location = new Point(pair.Key.Location.X - pair.Value);
-            }
-        }
+
+        
 
         #endregion
     }

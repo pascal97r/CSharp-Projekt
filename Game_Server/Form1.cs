@@ -57,6 +57,9 @@ namespace Game_Server
         Console console;
         List<String> consoleDaten;
 
+        //Spiel
+        List<Spiel> games;
+
         #endregion
 
         #region Getter / Setter
@@ -200,6 +203,9 @@ namespace Game_Server
 
             //Thread
             threadStart = new ThreadStart(empfangeDaten);
+
+            //Spiel
+            games = new List<Spiel>();
         }
         #endregion
 
@@ -433,7 +439,18 @@ namespace Game_Server
 
         #endregion
 
-       
-        
+        #region Spiel
+        public void starteSpiel(Spieler s1, Spieler s2)
+        {
+            Spiel spiel = new Spiel(s1, s2, this);
+        }
+
+        public void beendeSpiel(Spiel spiel)
+        {
+            games.Remove(spiel);
+        }
+        #endregion
+
+
     }
 }

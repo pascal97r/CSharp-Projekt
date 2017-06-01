@@ -9,7 +9,7 @@ using Game_Server;
 
 namespace Game_Server
 {
-    class Spieler
+    public class Spieler
     {
         #region Attribute
         const char TRENN = ';';
@@ -127,13 +127,13 @@ namespace Game_Server
                             if(server.abfrageRegisterName(name))
                             {
                                 //Name vorhanden
-                                bytes = Encoding.ASCII.GetBytes("DRN" + TRENN + "1");
+                                bytes = Encoding.ASCII.GetBytes("DRN" + TRENN + "1" + TRENN);
                                 stream.Write(bytes, 0, bytes.Length);
                             }
                             else
                             {
                                 //Name frei
-                                bytes = Encoding.ASCII.GetBytes("DRN" + TRENN + "0");
+                                bytes = Encoding.ASCII.GetBytes("DRN" + TRENN + "0" + TRENN);
                                 stream.Write(bytes, 0, bytes.Length);
                             }
 
@@ -154,7 +154,7 @@ namespace Game_Server
                             if(server.abfrageLoginUser(name, passwort))
                             {
                                 //Name + Passwort stimmen überein
-                                bytes = Encoding.ASCII.GetBytes("DBL" + TRENN + "0" + TRENN /* + Daten */);
+                                bytes = Encoding.ASCII.GetBytes("DBL" + TRENN + "0" + TRENN + name + TRENN /* + Daten */);
                                 stream.Write(bytes, 0, bytes.Length);
                                 loginSuccess = true;
                                 server.addPlayer(name);
@@ -162,14 +162,18 @@ namespace Game_Server
                             else
                             {
                                 //Name + Passwort stimmen nicht überein
-                                bytes = Encoding.ASCII.GetBytes("DBL" + TRENN + "1");
+                                bytes = Encoding.ASCII.GetBytes("DBL" + TRENN + "1" + TRENN);
                                 stream.Write(bytes, 0, bytes.Length);
                             }
                             break;
                         //Chat
                         case "MSG":
-                            String übergabe = "MSG" + TRENN + Name + TRENN + daten[2];
+                            String übergabe = "MSG" + TRENN + Name + TRENN + daten[2] + TRENN;
                             server.sendePrivatNachricht(daten[1], übergabe);
+                            break;
+                        //Spiel
+                        case "SYN":
+                            spiel.synchronisation();
                             break;
                     }
                 }
