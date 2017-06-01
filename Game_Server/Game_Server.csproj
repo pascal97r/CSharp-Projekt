@@ -68,6 +68,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protokoll.cs" />
+    <Compile Include="Spiel.cs" />
     <Compile Include="Spieler.cs" />
     <EmbeddedResource Include="Console.resx">
       <DependentUpon>Console.cs</DependentUpon>

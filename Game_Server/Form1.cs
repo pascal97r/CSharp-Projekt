@@ -433,18 +433,7 @@ namespace Game_Server
 
         #endregion
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if(abfrageLoginUser("Pasccal", "jesus"))
-            {
-                button1.Text = "richtig";
-            }
-            else
-            {
-                button1.Text = "falsch";
-            }
-            
-        }
+       
         
     }
 }

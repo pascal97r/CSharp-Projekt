@@ -33,6 +33,8 @@ namespace Game_Server
         Boolean loginSuccess = false;
 
         Boolean aktiv = true;
+
+        Spiel spiel;
         #endregion
 
         #region Getter / Setter
@@ -72,6 +74,14 @@ namespace Game_Server
             set
             {
                 loginSuccess = value;
+            }
+        }
+
+        public Spiel Spiel
+        {
+            set
+            {
+                spiel = value;
             }
         }
         #endregion
@@ -171,8 +181,15 @@ namespace Game_Server
         }
         #endregion
 
+        #region SendeDaten
+        public void sendeNachricht(String nachricht)
+        {
+
+        }
+        #endregion
+
         #region Chat
-        public void sendeNachricht(String text)
+        public void sendeNachrichtChat(String text)
         {
             Byte[] bytes = new Byte[1024];
 

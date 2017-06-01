@@ -45,7 +45,6 @@
             this.labelPort = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.labelMaxAnzahl = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -186,16 +185,6 @@
             this.labelMaxAnzahl.TabIndex = 11;
             this.labelMaxAnzahl.Text = "0";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(246, 209);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 25);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "Test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -210,7 +199,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(375, 340);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.labelMaxAnzahl);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.labelPort);
@@ -252,7 +240,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label labelMaxAnzahl;
         private System.Windows.Forms.ToolStripMenuItem consoleToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
         private System.Data.OleDb.OleDbConnection connection;
         private System.Data.OleDb.OleDbDataAdapter adapter;
         private System.Windows.Forms.DataGridView dataGridView1;
