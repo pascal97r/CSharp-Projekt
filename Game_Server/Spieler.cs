@@ -121,6 +121,9 @@ namespace Game_Server
                     switch (daten[0])
                     {
                         //Registration Namensüberprüfung
+                        case "BYE":
+
+                            break;
                         case "DRN":
                             name = daten[1];
 
@@ -182,6 +185,22 @@ namespace Game_Server
             {
                 thread.Interrupt();
             }
+        }
+        #endregion
+
+        #region Methoden
+        public void beendeClient()
+        {
+            client.Close();
+            client = null;
+
+            stream.Close();
+            stream = null;
+
+            server.removePlayer(this);
+
+            thread.Interrupt();
+            thread = null;
         }
         #endregion
 

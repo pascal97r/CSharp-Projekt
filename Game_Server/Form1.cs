@@ -332,9 +332,10 @@ namespace Game_Server
             player = null;
         }
         
-        public void removePlayer()
+        public void removePlayer(Spieler p)
         {
-
+            spieler.Remove(p);
+            p = null;
         }
         #endregion
 
