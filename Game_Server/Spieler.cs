@@ -113,7 +113,8 @@ namespace Game_Server
             {
                 while (aktiv)
                 {
-                    bytesRead = stream.Read(bytes, 0, bytes.Length);
+                    if(thread.IsAlive)
+                        bytesRead = stream.Read(bytes, 0, bytes.Length);
 
                     text = Encoding.ASCII.GetString(bytes);
                     daten = text.Split(TRENN);
@@ -122,7 +123,7 @@ namespace Game_Server
                     {
                         //Registration Namensüberprüfung
                         case "BYE":
-
+                            beendeClient();
                             break;
                         case "DRN":
                             name = daten[1];
@@ -169,6 +170,16 @@ namespace Game_Server
                                 stream.Write(bytes, 0, bytes.Length);
                             }
                             break;
+                        //Server
+                        case "DPD":
+                            server.sendPlayerData(this);
+                            break;
+                        case "URL":
+                            server.sendUserlist(this);
+                            break;
+                        case "HSC":
+                            server.sendHighscore(this);
+                            break;
                         //Chat
                         case "MSG":
                             String übergabe = "MSG" + TRENN + Name + TRENN + daten[2] + TRENN;
@@ -191,16 +202,29 @@ namespace Game_Server
         #region Methoden
         public void beendeClient()
         {
-            client.Close();
-            client = null;
+            if(aktiv)
+               aktiv = false;
 
-            stream.Close();
-            stream = null;
-
-            server.removePlayer(this);
+            if(client != null)
+            {
+                client.Close();
+                client = null;
+            }
+            
+            if(stream != null)
+            {
+                stream.Close();
+                stream = null;
+            }
+            if(server != null)
+            {
+                server.removePlayer(this);
+                server = null;
+            }
 
             thread.Interrupt();
             thread = null;
+
         }
         #endregion
 

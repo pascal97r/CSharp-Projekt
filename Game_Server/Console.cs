@@ -20,6 +20,8 @@ namespace Game_Server
         Thread thread;
         ThreadStart threadStart;
 
+        delegate void SetListBoxCallback(String text);
+
         Form1 server;
         #endregion
 
@@ -75,10 +77,24 @@ namespace Game_Server
             }
         }
 
-        public void updateList(String text)
+
+        public void setListBoxText(String text)
         {
-            consoleDaten.Add(text);
+            if(listBox1.InvokeRequired)
+            {
+                SetListBoxCallback del = new SetListBoxCallback(setListBoxText);
+                this.Invoke(del, new object[] { text });
+            }
+            else
+            {
+                listBox1.Items.Add(text);
+            }
         }
         #endregion
+
+        private void Console_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            server.closeConsole();
+        }
     }
 }

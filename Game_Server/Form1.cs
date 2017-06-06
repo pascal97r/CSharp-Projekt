@@ -102,9 +102,7 @@ namespace Game_Server
                 adapter.Fill(dsProfil, "Profil");
                 dtProfil = dsProfil.Tables["Profil"];
 
-                dataGridView1.DataSource = dsProfil;
-                dataGridView1.DataMember = "Profil";
-
+                updateConsole("[Server] >> Datenbank gestartet");
                 labelDatenbankStatus.BackColor = Color.LightGreen;
             }
             catch(Exception e)
@@ -116,6 +114,7 @@ namespace Game_Server
         
         private void stoppeDatenbank()
         {
+            updateConsole("[Server] >> Datenbank gestoppt");
             labelDatenbankStatus.BackColor = Color.Red;
             connection.Close();
             connection = null;
@@ -139,6 +138,8 @@ namespace Game_Server
                 labelPort.Text = einstellungen.Port.ToString();
                 labelMaxAnzahl.Text = einstellungen.MaxAnzahl.ToString();
 
+                updateConsole("[Server] >> Server gestartet");
+
                 thread = new Thread(threadStart);
                 thread.Start();
             }
@@ -157,6 +158,8 @@ namespace Game_Server
             spieler = null;
             listener = null;
 
+            updateConsole("[Server] >> Server gestoppt");
+
             thread.Interrupt();
             timer1.Stop();
         }
@@ -170,10 +173,12 @@ namespace Game_Server
             {
                 client = listener.AcceptTcpClient();
 
-                if (spieleranzahl <= MaxPlayer)
-                {
-                    erstelleClient();
-                }
+                erstelleClient();
+
+                //if (spieleranzahl <= MaxPlayer)
+                //{
+                //    erstelleClient();
+                //}
             }
         }
         #endregion
@@ -194,7 +199,6 @@ namespace Game_Server
             //Datenbank
 
             //Console
-            console = new Console(this);
             consoleDaten = new List<string>();
             consoleDaten.Add("Test");
 
@@ -239,8 +243,12 @@ namespace Game_Server
 
         private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            console.ConsoleDaten = consoleDaten;
-            console.Show();
+            if(console == null)
+            {
+                console = new Console(this);
+                console.ConsoleDaten = consoleDaten;
+                console.Show();
+            }
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -305,7 +313,6 @@ namespace Game_Server
         private void timer1_Tick(object sender, EventArgs e)
         {
             zeit++;
-            console.Zeit = zeit;
                         
             if (meldungZeit < zeit)
             {
@@ -329,9 +336,70 @@ namespace Game_Server
 
             spieler.Add(player);
 
+            updateConsole("[Server] >> Spieler hinzugefügt : " + name + " : " + player.Spielernummer);
+
             player = null;
         }
         
+        public void sendPlayerData(Spieler p)
+        {
+            int win = 0;
+            int lose = 0;
+            int spiele = 0;
+            int spielzeit = 0;
+
+            foreach (DataRow dr in dtProfil.Rows)
+            {
+                if (dr["Name"].ToString().ToLower().Equals(p.Name))
+                {
+                    win = Convert.ToInt32(dr["Wins"]);
+                    lose = Convert.ToInt32(dr["Loses"]);
+                    spiele = Convert.ToInt32(dr["Spiele"]);
+                    spielzeit = Convert.ToInt32(dr["Spielzeit"]);
+
+                    break;
+                }
+            }
+
+            updateConsole("[Server] >> Befehl: " + "DPD" + ";" + win + ";" + lose + ";" + spiele + ";" + spielzeit + ";");
+
+            spieler[p.Spielernummer].sendeNachricht("DPD" + ";" + win + ";" + lose + ";" + spiele + ";" + spielzeit + ";");
+        }
+
+        public void sendUserlist(Spieler p)
+        {
+            String namen = "";
+
+            foreach(Spieler s in spieler)
+            {
+                namen += s.Name;
+                namen += ";";
+            }
+
+            updateConsole("[Server] >> Befehl: " + "URL" + namen);
+
+            spieler[p.Spielernummer].sendeNachricht("URL" + namen);
+        }
+
+        public void sendHighscore(Spieler p)
+        {
+            int highscore = 0;
+
+            foreach (DataRow dr in dtProfil.Rows)
+            {
+                if (dr["Name"].ToString().ToLower().Equals(p.Name))
+                {
+                    highscore = Convert.ToInt32(dr["Highscore"]);
+
+                    break;
+                }
+            }
+
+            updateConsole("[Server] >> Befehl: " + "HSC" + highscore + ";");
+
+            spieler[p.Spielernummer].sendeNachricht("HSC" + highscore + ";");
+        }
+
         public void removePlayer(Spieler p)
         {
             spieler.Remove(p);
@@ -351,6 +419,7 @@ namespace Game_Server
                     {
                         if(dr["Passwort"].ToString().Equals(passwort))
                         {
+                            updateConsole("[Server] >> Loginabfrage: " + name + " : " + passwort + " : True");
                             return true;
                         }
                     }
@@ -360,6 +429,8 @@ namespace Game_Server
             {
 
             }
+
+            updateConsole("[Server] >> Loginabfrage: " + name + " : " + passwort + " : False");
 
             return false;
         }
@@ -373,10 +444,13 @@ namespace Game_Server
                 {
                     if (dr["Name"].ToString().ToLower() == name)
                     {
+                        updateConsole("[Server] >> Registernameabfrage: " + name + " : Name vorhanden");
                         return true;
                     }
                 }
-                
+
+                updateConsole("[Server] >> Registernameabfrage: " + name + " : Name frei");
+
                 return false;
             }
             catch
@@ -405,6 +479,8 @@ namespace Game_Server
             adapter.InsertCommand = cmdBld.GetInsertCommand();
             adapter.Update(dsProfil.Tables["Profil"]);
 
+            updateConsole("[Server] >> Registrierung: " + name + " : " + passwort);
+
             table = null;
             newRow = null;
             cmdBld = null;
@@ -422,6 +498,28 @@ namespace Game_Server
                 }
             }
         }
+
+
+        private void textBoxChat_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                broadcast();
+            }
+        }
+
+        private void broadcast()
+        {
+            String nachricht = textBoxChat.Text;
+
+            //foreach(Spieler s in spieler)
+            //{
+            //    s.sendeNachricht("MSG" + ";" + "|Broadcast|" + ";" + nachricht + ";");
+            //}
+
+            updateConsole("[Server] >> Broadcast: " + nachricht);
+            textBoxChat.Text = "";
+        }
         #endregion
 
         #region Status / Console
@@ -438,18 +536,35 @@ namespace Game_Server
             }
         }
 
+        private void updateConsole(String nachricht)
+        {
+            if(console != null)
+            {
+                console.setListBoxText(nachricht);
+            }
+            consoleDaten.Add(nachricht);
+        }
+
+        public void closeConsole()
+        {
+            console = null;
+        }
+
         #endregion
 
         #region Spiel
         public void starteSpiel(Spieler s1, Spieler s2)
         {
+            updateConsole("[Server] >> Spielmanager: Spiel gestartet von " + s1.Name + " : Mitspieler : " + s2.Name);
             Spiel spiel = new Spiel(s1, s2, this);
         }
 
         public void beendeSpiel(Spiel spiel)
         {
+            updateConsole("[Server] >> Spielmanager : Spiel beendet von " + spiel.Spieler[0]);
             games.Remove(spiel);
         }
+
         #endregion
 
 

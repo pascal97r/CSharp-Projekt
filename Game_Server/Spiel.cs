@@ -35,20 +35,36 @@ namespace Game_Server
 
         Boolean start = false;
 
+        PlayerPosManager pMan1;
+        PlayerPosManager pMan2;
+
         Form1 server;
+
+        public List<Spieler> Spieler
+        {
+            get
+            {
+                return spieler;
+            }
+
+            set
+            {
+                spieler = value;
+            }
+        }
         #endregion
-        
+
 
         #region Mehrspieler
         public Spiel(Spieler spieler1, Spieler spieler2, Form1 server)
         {
-            spieler = new List<Spieler>();
+            Spieler = new List<Spieler>();
 
             spieler1.Spiel = this;
             spieler2.Spiel = this;
 
-            spieler.Add(spieler1);
-            spieler.Add(spieler2);
+            Spieler.Add(spieler1);
+            Spieler.Add(spieler2);
 
             this.server = server;
 
@@ -63,7 +79,7 @@ namespace Game_Server
             int x2 = 400;
             int y = 400;
             
-            foreach(Spieler s in spieler)
+            foreach(Spieler s in Spieler)
             {
                 s.sendeNachricht("STA" + TRENN + x1 + TRENN + y + TRENN + x2 + TRENN + y + TRENN);
                 x1 += 100;
@@ -86,13 +102,19 @@ namespace Game_Server
         //Spielablauf
         private void game()
         {
+            int posPlayer1_x;
+            int posPlayer1_y;
+
+            int posPlayer2_x;
+            int posPlayer2_y;
+
             if (synS1 == true && synS2 == true)
             {
                 start = true;
 
                 for (int countdown = 5; countdown == 0; countdown--)
                 {
-                    foreach (Spieler s in spieler)
+                    foreach (Spieler s in Spieler)
                     {
                         s.sendeNachricht("CND" + TRENN + countdown + TRENN);
                         countdown--;
@@ -100,10 +122,21 @@ namespace Game_Server
                     }
                 }
             }
-            
+
+            pMan1 = new PlayerPosManager(Spieler[0]);
+            pMan2 = new PlayerPosManager(Spieler[1]);
+
             while (start)
             {
-                
+
+
+                foreach(Spieler s in Spieler)
+                {
+                    if(s.Equals(Spieler[0]))
+                    {
+                        pMan1.sendPos();
+                    }
+                }
             }
         }
         #endregion
@@ -115,7 +148,7 @@ namespace Game_Server
 
             String nachricht = "MET" + TRENN + x + TRENN + rand.Next(1, 5);
 
-            foreach(Spieler s in spieler)
+            foreach(Spieler s in Spieler)
             {
                 s.sendeNachricht(nachricht);
             }
@@ -146,10 +179,6 @@ namespace Game_Server
             } while (überlappen == true);
             return x;
         }
-
-
-        
-
         #endregion
     }
 }

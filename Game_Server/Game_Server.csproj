@@ -65,6 +65,7 @@
     <Compile Include="Game_Einstellungen.Designer.cs">
       <DependentUpon>Game_Einstellungen.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlayerPosManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protokoll.cs" />

@@ -45,9 +45,11 @@
             this.labelPort = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.labelMaxAnzahl = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.listBoxChat = new System.Windows.Forms.ListBox();
+            this.textBoxChat = new System.Windows.Forms.TextBox();
+            this.buttonKick = new System.Windows.Forms.Button();
+            this.buttonBan = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // listBoxPlayer
@@ -185,20 +187,49 @@
             this.labelMaxAnzahl.TabIndex = 11;
             this.labelMaxAnzahl.Text = "0";
             // 
-            // dataGridView1
+            // listBoxChat
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 240);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(375, 75);
-            this.dataGridView1.TabIndex = 13;
+            this.listBoxChat.FormattingEnabled = true;
+            this.listBoxChat.Location = new System.Drawing.Point(158, 156);
+            this.listBoxChat.Name = "listBoxChat";
+            this.listBoxChat.Size = new System.Drawing.Size(210, 134);
+            this.listBoxChat.TabIndex = 12;
+            // 
+            // textBoxChat
+            // 
+            this.textBoxChat.Location = new System.Drawing.Point(158, 288);
+            this.textBoxChat.Name = "textBoxChat";
+            this.textBoxChat.Size = new System.Drawing.Size(210, 20);
+            this.textBoxChat.TabIndex = 13;
+            this.textBoxChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxChat_KeyDown);
+            // 
+            // buttonKick
+            // 
+            this.buttonKick.Location = new System.Drawing.Point(140, 122);
+            this.buttonKick.Name = "buttonKick";
+            this.buttonKick.Size = new System.Drawing.Size(88, 24);
+            this.buttonKick.TabIndex = 14;
+            this.buttonKick.Text = "Kicken";
+            this.buttonKick.UseVisualStyleBackColor = true;
+            // 
+            // buttonBan
+            // 
+            this.buttonBan.Location = new System.Drawing.Point(140, 92);
+            this.buttonBan.Name = "buttonBan";
+            this.buttonBan.Size = new System.Drawing.Size(88, 24);
+            this.buttonBan.TabIndex = 15;
+            this.buttonBan.Text = "Bannen";
+            this.buttonBan.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(375, 340);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.buttonBan);
+            this.Controls.Add(this.buttonKick);
+            this.Controls.Add(this.textBoxChat);
+            this.Controls.Add(this.listBoxChat);
             this.Controls.Add(this.labelMaxAnzahl);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.labelPort);
@@ -216,7 +247,6 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -242,7 +272,10 @@
         private System.Windows.Forms.ToolStripMenuItem consoleToolStripMenuItem;
         private System.Data.OleDb.OleDbConnection connection;
         private System.Data.OleDb.OleDbDataAdapter adapter;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.ListBox listBoxChat;
+        private System.Windows.Forms.TextBox textBoxChat;
+        private System.Windows.Forms.Button buttonKick;
+        private System.Windows.Forms.Button buttonBan;
     }
 }
 
