@@ -16,10 +16,7 @@ namespace Game_Server
         #region Attribute
         List<String> consoleDaten = new List<String>();
         int zeit = 0;
-
-        Thread thread;
-        ThreadStart threadStart;
-
+        
         delegate void SetListBoxCallback(String text);
 
         Form1 server;

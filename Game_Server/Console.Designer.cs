@@ -56,7 +56,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.listBox1);
             this.Name = "Console";
-            this.Text = "Console + 0";
+            this.Text = "Console ";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Console_FormClosed);
             this.Load += new System.EventHandler(this.Console_Load);
             this.ResumeLayout(false);

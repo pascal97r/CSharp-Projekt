@@ -34,6 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxSpieleranzahl = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonBann = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -87,21 +88,33 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(11, 15);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(174, 176);
+            this.groupBox1.Size = new System.Drawing.Size(174, 110);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Servereinstellungen";
+            // 
+            // buttonBann
+            // 
+            this.buttonBann.Location = new System.Drawing.Point(15, 131);
+            this.buttonBann.Name = "buttonBann";
+            this.buttonBann.Size = new System.Drawing.Size(164, 29);
+            this.buttonBann.TabIndex = 8;
+            this.buttonBann.Text = "Bann-Manager";
+            this.buttonBann.UseVisualStyleBackColor = true;
+            this.buttonBann.Click += new System.EventHandler(this.buttonBann_Click);
             // 
             // Game_Einstellungen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(197, 302);
+            this.Controls.Add(this.buttonBann);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonSave);
             this.Name = "Game_Einstellungen";
             this.Text = "Game_Einstellungen";
             this.Load += new System.EventHandler(this.Game_Einstellungen_Load);
+            this.LocationChanged += new System.EventHandler(this.Game_Einstellungen_LocationChanged);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -115,5 +128,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxSpieleranzahl;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button buttonBann;
     }
 }

@@ -16,6 +16,8 @@ namespace Game_Server
         int port = 7007;
         int maxAnzahl = 10;
 
+        Bannmanager bannManager;
+
         Form1 server = null;
 
         public Game_Einstellungen()
@@ -77,6 +79,30 @@ namespace Game_Server
         private void Game_Einstellungen_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonBann_Click(object sender, EventArgs e)
+        {
+            if(bannManager == null)
+            {
+                bannManager = new Bannmanager(this, this.Location.X, this.Location.Y);
+                
+                bannManager.Show();
+
+                bannManager.Location = new Point(this.Location.X + 206, this.Location.Y + 1);
+            }
+        }
+
+        public void closeBann()
+        {
+            bannManager.Hide();
+            bannManager = null;
+        }
+
+        private void Game_Einstellungen_LocationChanged(object sender, EventArgs e)
+        {
+            if(bannManager != null)
+                bannManager.Location = new Point(this.Location.X + 206, this.Location.Y + 1);
         }
     }
 }

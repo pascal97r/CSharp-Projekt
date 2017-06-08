@@ -60,6 +60,10 @@ namespace Game_Server
         //Spiel
         List<Spiel> games;
 
+        //Onlinenutzer
+        Onlinenutzer nutzer;
+        delegate void SetButtonNutzerCallback(int anzahl);
+
         #endregion
 
         #region Getter / Setter
@@ -307,6 +311,68 @@ namespace Game_Server
             }
 
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (console != null)
+            {
+                console.Close();
+                console = null;
+            }
+
+            serverAn = false;
+
+            if (listener != null)
+                listener = null;
+
+            if (client != null)
+            {
+                client.Close();
+                client = null;
+            }
+
+            if (spieler != null)
+                spieler = null;
+
+            if (namen != null)
+                namen = null;
+
+            if (thread != null)
+            {
+                thread.Interrupt();
+                thread = null;
+            }
+
+            if (dsProfil != null)
+                dsProfil = null;
+
+            if (dtProfil != null)
+                dtProfil = null;
+
+            if (reader != null)
+            {
+                reader.Close();
+                reader = null;
+            }
+
+            if (cmd != null)
+                cmd = null;
+
+            if (cmd2 != null)
+                cmd2 = null;
+
+            if (einstellungen != null)
+            {
+                einstellungen.Close();
+                einstellungen = null;
+            }
+        }
+
+        private void Form1_LocationChanged(object sender, EventArgs e)
+        {
+            if(nutzer != null)
+            nutzer.Location = new Point(this.Location.X - 140, this.Location.Y + 120);
+        }
         #endregion
 
         #region Timer
@@ -332,11 +398,19 @@ namespace Game_Server
         public void addPlayer(String name)
         {
             spieleranzahl++;
+            setButtonNutzerText(spieleranzahl);
             player.Spielernummer = spieleranzahl;
 
             spieler.Add(player);
 
             updateConsole("[Server] >> Spieler hinzugefügt : " + name + " : " + player.Spielernummer);
+
+            //Onlinenutzerform
+            if(nutzer != null)
+            {
+                updateNutzerliste(name);
+                updateSpielerliste(player);
+            }
 
             player = null;
         }
@@ -565,6 +639,50 @@ namespace Game_Server
             games.Remove(spiel);
         }
 
+
+        #endregion
+
+        #region Onlinenutzer
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if(nutzer == null)
+            {
+                nutzer = new Onlinenutzer(this, spieler);
+                nutzer.Show();
+
+                nutzer.Location = new Point(this.Location.X - 140, this.Location.Y + 120);
+            }
+        }
+        
+        private void updateSpielerliste(Spieler spieler)
+        {
+            nutzer.addUser(spieler);
+        }
+
+        private void updateNutzerliste(String name)
+        {
+            nutzer.setListBoxText(name);
+        }
+
+        public void schließeNutzer()
+        {
+            nutzer.Hide();
+            nutzer = null;
+        }
+
+        private void setButtonNutzerText(int anzahl)
+        {
+
+            if (buttonNutzer.InvokeRequired)
+            {
+                SetButtonNutzerCallback del = new SetButtonNutzerCallback(setButtonNutzerText);
+                this.Invoke(del, new object[] { anzahl });
+            }
+            else
+            {
+                buttonNutzer.Text = "Online Nutzer (" + anzahl + ")";
+            }
+        }
         #endregion
 
 

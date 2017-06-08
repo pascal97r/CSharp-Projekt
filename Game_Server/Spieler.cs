@@ -152,23 +152,27 @@ namespace Game_Server
                             break;
                         //Login
                         case "DBL":
-                            name = daten[1];
-                            passwort = daten[2];
+                            if(!loginSuccess)
+                            {
+                                name = daten[1];
+                                passwort = daten[2];
 
-                            if(server.abfrageLoginUser(name, passwort))
-                            {
-                                //Name + Passwort stimmen überein
-                                bytes = Encoding.ASCII.GetBytes("DBL" + TRENN + "0" + TRENN + name + TRENN /* + Daten */);
-                                stream.Write(bytes, 0, bytes.Length);
-                                loginSuccess = true;
-                                server.addPlayer(name);
+                                if (server.abfrageLoginUser(name, passwort))
+                                {
+                                    //Name + Passwort stimmen überein
+                                    bytes = Encoding.ASCII.GetBytes("DBL" + TRENN + "0" + TRENN + name + TRENN /* + Daten */);
+                                    stream.Write(bytes, 0, bytes.Length);
+                                    loginSuccess = true;
+                                    server.addPlayer(name);
+                                }
+                                else
+                                {
+                                    //Name + Passwort stimmen nicht überein
+                                    bytes = Encoding.ASCII.GetBytes("DBL" + TRENN + "1" + TRENN);
+                                    stream.Write(bytes, 0, bytes.Length);
+                                }
                             }
-                            else
-                            {
-                                //Name + Passwort stimmen nicht überein
-                                bytes = Encoding.ASCII.GetBytes("DBL" + TRENN + "1" + TRENN);
-                                stream.Write(bytes, 0, bytes.Length);
-                            }
+                            
                             break;
                         //Server
                         case "DPD":

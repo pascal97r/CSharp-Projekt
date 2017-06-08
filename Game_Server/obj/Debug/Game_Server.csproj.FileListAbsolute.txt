@@ -40,3 +40,5 @@ H:\Eigene Dateien\FI11\C#\Game_Server\Game_Server\Game_Server\obj\Debug\Game_Ser
 H:\Eigene Dateien\FI11\C#\Game_Server\Game_Server\Game_Server\obj\Debug\Game_Server.Game_Einstellungen.resources
 H:\Eigene Dateien\FI11\C#\Game_Server\Game_Server\Game_Server\obj\Debug\Game_Server.Properties.Resources.resources
 H:\Eigene Dateien\FI11\C#\Game_Server\Game_Server\Game_Server\obj\Debug\Game_Server.csproj.GenerateResource.Cache
+C:\Users\Pascal\Desktop\C#\Game_Server\Game_Server\Game_Server\obj\Debug\Game_Server.Bannmanager.resources
+C:\Users\Pascal\Desktop\C#\Game_Server\Game_Server\Game_Server\obj\Debug\Game_Server.Onlinenutzer.resources

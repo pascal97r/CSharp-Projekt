@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.listBoxPlayer = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.startenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.datenbankToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,20 +46,9 @@
             this.labelMaxAnzahl = new System.Windows.Forms.Label();
             this.listBoxChat = new System.Windows.Forms.ListBox();
             this.textBoxChat = new System.Windows.Forms.TextBox();
-            this.buttonKick = new System.Windows.Forms.Button();
-            this.buttonBan = new System.Windows.Forms.Button();
+            this.buttonNutzer = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // listBoxPlayer
-            // 
-            this.listBoxPlayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxPlayer.FormattingEnabled = true;
-            this.listBoxPlayer.ItemHeight = 20;
-            this.listBoxPlayer.Location = new System.Drawing.Point(12, 42);
-            this.listBoxPlayer.Name = "listBoxPlayer";
-            this.listBoxPlayer.Size = new System.Drawing.Size(122, 104);
-            this.listBoxPlayer.TabIndex = 1;
             // 
             // menuStrip1
             // 
@@ -106,7 +94,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 164);
+            this.label1.Location = new System.Drawing.Point(12, 31);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(69, 13);
             this.label1.TabIndex = 3;
@@ -115,7 +103,7 @@
             // labelServerStatus
             // 
             this.labelServerStatus.AutoSize = true;
-            this.labelServerStatus.Location = new System.Drawing.Point(87, 164);
+            this.labelServerStatus.Location = new System.Drawing.Point(87, 31);
             this.labelServerStatus.Name = "labelServerStatus";
             this.labelServerStatus.Size = new System.Drawing.Size(25, 13);
             this.labelServerStatus.TabIndex = 4;
@@ -124,7 +112,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 197);
+            this.label2.Location = new System.Drawing.Point(12, 64);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 5;
@@ -133,7 +121,7 @@
             // labelDatenbankStatus
             // 
             this.labelDatenbankStatus.AutoSize = true;
-            this.labelDatenbankStatus.Location = new System.Drawing.Point(109, 197);
+            this.labelDatenbankStatus.Location = new System.Drawing.Point(109, 64);
             this.labelDatenbankStatus.Name = "labelDatenbankStatus";
             this.labelDatenbankStatus.Size = new System.Drawing.Size(25, 13);
             this.labelDatenbankStatus.TabIndex = 6;
@@ -203,31 +191,22 @@
             this.textBoxChat.TabIndex = 13;
             this.textBoxChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxChat_KeyDown);
             // 
-            // buttonKick
+            // buttonNutzer
             // 
-            this.buttonKick.Location = new System.Drawing.Point(140, 122);
-            this.buttonKick.Name = "buttonKick";
-            this.buttonKick.Size = new System.Drawing.Size(88, 24);
-            this.buttonKick.TabIndex = 14;
-            this.buttonKick.Text = "Kicken";
-            this.buttonKick.UseVisualStyleBackColor = true;
-            // 
-            // buttonBan
-            // 
-            this.buttonBan.Location = new System.Drawing.Point(140, 92);
-            this.buttonBan.Name = "buttonBan";
-            this.buttonBan.Size = new System.Drawing.Size(88, 24);
-            this.buttonBan.TabIndex = 15;
-            this.buttonBan.Text = "Bannen";
-            this.buttonBan.UseVisualStyleBackColor = true;
+            this.buttonNutzer.Location = new System.Drawing.Point(0, 291);
+            this.buttonNutzer.Name = "buttonNutzer";
+            this.buttonNutzer.Size = new System.Drawing.Size(103, 24);
+            this.buttonNutzer.TabIndex = 14;
+            this.buttonNutzer.Text = "Online Nutzer (0)";
+            this.buttonNutzer.UseVisualStyleBackColor = true;
+            this.buttonNutzer.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(375, 340);
-            this.Controls.Add(this.buttonBan);
-            this.Controls.Add(this.buttonKick);
+            this.Controls.Add(this.buttonNutzer);
             this.Controls.Add(this.textBoxChat);
             this.Controls.Add(this.listBoxChat);
             this.Controls.Add(this.labelMaxAnzahl);
@@ -239,12 +218,13 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.labelServerStatus);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.listBoxPlayer);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Server";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.LocationChanged += new System.EventHandler(this.Form1_LocationChanged);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -253,8 +233,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ListBox listBoxPlayer;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem startenToolStripMenuItem;
         private System.Windows.Forms.Label label1;
@@ -274,8 +252,7 @@
         private System.Data.OleDb.OleDbDataAdapter adapter;
         private System.Windows.Forms.ListBox listBoxChat;
         private System.Windows.Forms.TextBox textBoxChat;
-        private System.Windows.Forms.Button buttonKick;
-        private System.Windows.Forms.Button buttonBan;
+        private System.Windows.Forms.Button buttonNutzer;
     }
 }
 
